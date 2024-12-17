@@ -22,10 +22,6 @@ export default function Home() {
   if (isLoading) return <>Loading...</>;
   if (isError) return <div>Sorry There was an Error</div>;
 
-  const deleteTask = (id: number) => {
-    tasks.filter((task: Task) => task.id !== id);
-  };
-
   return (
     <div className="max-w-3xl m-auto relative">
       <div className="max-w-3xl w-full mx-auto p-4 absolute -top-10">
@@ -51,7 +47,6 @@ export default function Home() {
               title={task.title}
               color={task.color}
               completed={task.completed}
-              onDelete={() => deleteTask(task.id)}
             />
           ))
         )}

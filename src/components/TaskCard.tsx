@@ -21,7 +21,6 @@ interface TaskCardProps {
   title: string;
   color: string;
   completed: boolean;
-  onDelete: () => void;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ id, title, completed }) => {
