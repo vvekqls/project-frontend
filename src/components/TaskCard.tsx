@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Trash2 } from "lucide-react";
+import clsx from "clsx";
 
 interface TaskCardProps {
   id: number;
@@ -21,19 +22,19 @@ const TaskCard: React.FC<TaskCardProps> = ({
   onDelete,
 }) => {
   return (
-    <Card className="flex items-center justify-between bg-background text-white mb-4 rounded-lg	">
+    <Card className="flex items-center justify-between bg-foreground text-white mb-4 rounded-lg	border-foreground border-2">
       <Checkbox
-        className="w-5 h-5 text-white ml-2 rounded-full	border-blue border-2"
+        className={clsx(
+          "w-5 h-5 text-white ml-2 rounded-full	border-blue border-2",
+          completed ? "border-purple" : "border-blue",
+          completed && "bg-purple"
+        )}
         checked={completed}
         onCheckedChange={onToggle}
       />
-      <Link key={id} className="w-11/12" href={`/edit/${id}`}>
+      <Link key={id} className="w-11/12 overflow-hidden" href={`/edit/${id}`}>
         <CardContent className="flex items-center gap-4 p-4">
-          <div className="flex items-center gap-2 w-">
-            <span
-              className="w-4 h-4 rounded-full"
-              style={{ backgroundColor: color }}
-            />
+          <div className="items-center gap-2 w-">
             <p className={completed ? "line-through opacity-50" : ""}>
               {title}
             </p>

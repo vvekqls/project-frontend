@@ -40,7 +40,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, initialData }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-4 max-w-lg mx-auto">
-      {/* Title */}
       <label className="block text-lg mb-2">Title</label>
       <Input
         placeholder="Ex. Brush your teeth"
@@ -49,7 +48,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, initialData }) => {
         className="bg-gray-800 text-white"
       />
 
-      {/* Color Picker */}
       <p className="text-lg mb-2">Color</p>
       <div className="flex gap-4">
         {colors.map((color) => (
@@ -65,7 +63,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, initialData }) => {
         ))}
       </div>
 
-      {/* Save / Add Button */}
       <Button
         type="submit"
         className="w-full bg-blue-500 hover:bg-blue-600 py-2 text-lg"
