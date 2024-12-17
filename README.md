@@ -1,4 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Tracker App
+
+A full-stack task tracking application built with **Next.js**, **Express.js**, and **MySQL**, emphasizing clean architecture and modularity.
+
+## Features
+
+- **Task Management**: Create, read, update, and delete tasks.
+- **Responsive UI**: User-friendly interface built with Next.js.
+- **Dockerized Environment**: Easy setup and deployment using Docker.
+
+## Technologies Used
+
+- **Frontend**: Next.js, React.js
+- **Containerization**: Docker, Docker Compose
+- **Version Management**: NVM (Node Version Manager)
 
 ## Getting Started
 
