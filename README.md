@@ -26,7 +26,7 @@ bun dev
     nvm use 20.9.0
   ```
   ```sh
-    npm install
+    npm install --legacy-peer-deps
   ```
   ```sh
     npm run dev
