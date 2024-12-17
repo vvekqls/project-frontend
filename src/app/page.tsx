@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskCard from "@/components/TaskCard";
 import TaskSummary from "@/components/TaskSummary";
 import EmptyState from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { updateCompletion } from "@/utils";
 
 interface Task {
   id: number;
@@ -16,29 +17,30 @@ interface Task {
 }
 
 export default function Home() {
-  const [tasks, setTasks] = useState<Task[]>([
-    // Example tasks (replace with API or state management)
-    { id: 1, title: "Finish coding task", color: "#34d399", completed: false },
-    {
-      id: 3,
-      title:
-        "Finish coding task asdasdasdasdasdasdasdasdasddasd asdasdasdasdasdasd dasdasdasd",
-      color: "#34d399",
-      completed: false,
-    },
-    {
-      id: 2,
-      title: "Push changes to GitHub",
-      color: "#fbbf24",
-      completed: true,
-    },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    try {
+      fetch("http://localhost:3001/tasks/")
+        .then((res) => res.json())
+        .then((data) => {
+          const { data: tasksData } = data;
+          setTasks(tasksData);
+        });
+    } catch (e) {
+      console.log("error", e);
+    }
+  }, []);
 
   const toggleCompletion = (id: number) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
+    setTasks((prevTasks) =>
+      prevTasks.map((task: Task) => {
+        if (task.id === id) {
+          updateCompletion(id, task);
+          return { ...task, completed: !task.completed };
+        }
+        return task;
+      })
     );
   };
 
@@ -47,10 +49,10 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="max-w-3xl mx-auto p-4">
+    <div className="max-w-3xl m-auto relative">
+      <div className="max-w-3xl w-full mx-auto p-4 absolute -top-10">
         <Link href="/add">
-          <Button className="w-full h-14 mb-6 bg-blue hover:bg-blue-600 text-sm py-2 rounded font-bold">
+          <Button className="w-full h-14 mb-6 bg-blue text-sm py-2 rounded font-bold">
             Create Task
             <PlusCircle size={16} />
           </Button>

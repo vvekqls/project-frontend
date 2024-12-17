@@ -27,7 +27,7 @@ export default function EditTodoPage() {
   if (!task) return <div className="text-center text-white">Loading...</div>;
 
   return (
-    <div className="max-w-lg min-h-screen bg-black text-white p-6 m-auto">
+    <div className="max-w-3xl min-h-screen bg-background text-white p-6 m-auto">
       <BackButton />
       <TaskForm onSubmit={handleSaveTask} initialData={task} />
     </div>

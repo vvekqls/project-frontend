@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      width: {
+        '156': '46rem'
+      },
       colors: {
         background: "#1A1A1A",
         foreground: "#333333",

@@ -1,6 +1,16 @@
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import clsx from "clsx";
 
@@ -16,7 +26,6 @@ interface TaskCardProps {
 const TaskCard: React.FC<TaskCardProps> = ({
   id,
   title,
-  color,
   completed,
   onToggle,
   onDelete,
@@ -41,9 +50,32 @@ const TaskCard: React.FC<TaskCardProps> = ({
           </div>
         </CardContent>
       </Link>
-      <button onClick={onDelete} className="text-gray hover:text-gray p-2">
-        <Trash2 size={18} />
-      </button>
+      <Dialog>
+        <DialogTrigger className="text-gray hover:text-gray p-2">
+          <Trash2 size={18} />
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your
+              task.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="secondary" className="bg-">
+              Close
+            </Button>
+            <Button
+              type="submit"
+              className="text-whit-500 bg-red-500"
+              onClick={onDelete}
+            >
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
