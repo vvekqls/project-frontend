@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import { Inter } from "next/font/google";
+import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 
 import "./globals.css";
 
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`bg-background text-white ${inter.className}`}>
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <ReactQueryProvider>
+          <main className="min-h-screen">{children}</main>
+        </ReactQueryProvider>
       </body>
     </html>
   );

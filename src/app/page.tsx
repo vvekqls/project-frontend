@@ -1,51 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import TaskCard from "@/components/TaskCard";
 import TaskSummary from "@/components/TaskSummary";
 import EmptyState from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { updateCompletion } from "@/utils";
-
-interface Task {
-  id: number;
-  title: string;
-  color: string;
-  completed: boolean;
-}
+import { fetchAllTasks } from "@/utils";
+import { Task } from "@/lib/types";
 
 export default function Home() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  useEffect(() => {
-    try {
-      fetch("http://localhost:3001/tasks/")
-        .then((res) => res.json())
-        .then((data) => {
-          const { data: tasksData } = data;
-          setTasks(tasksData);
-        });
-    } catch (e) {
-      console.log("error", e);
-    }
-  }, []);
-
-  const toggleCompletion = (id: number) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task: Task) => {
-        if (task.id === id) {
-          updateCompletion(id, task);
-          return { ...task, completed: !task.completed };
-        }
-        return task;
-      })
-    );
-  };
+  const {
+    data: { data: tasks } = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: () => fetchAllTasks(),
+    queryKey: ["tasks"],
+  });
+  if (isLoading) return <>Loading...</>;
+  if (isError) return <div>Sorry There was an Error</div>;
 
   const deleteTask = (id: number) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    tasks.filter((task: Task) => task.id !== id);
   };
 
   return (
@@ -60,20 +38,19 @@ export default function Home() {
 
         <TaskSummary
           total={tasks.length}
-          completed={tasks.filter((task) => task.completed).length}
+          completed={tasks.filter((task: Task) => task.completed).length}
         />
 
         {tasks.length === 0 ? (
           <EmptyState />
         ) : (
-          tasks.map((task) => (
+          tasks.map((task: Task) => (
             <TaskCard
               key={task.id}
               id={task.id}
               title={task.title}
               color={task.color}
               completed={task.completed}
-              onToggle={() => toggleCompletion(task.id)}
               onDelete={() => deleteTask(task.id)}
             />
           ))

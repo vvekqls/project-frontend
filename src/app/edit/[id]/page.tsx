@@ -1,35 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import TaskForm from "@/components/TaskForm";
 import BackButton from "@/components/BackButton";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { editTask, fetchTaskById } from "@/utils";
 
 export default function EditTodoPage() {
-  const router = useRouter();
-  const { id } = useParams();
-  const [task, setTask] = useState<{ title: string; color: string } | null>(
-    null
-  );
+  const { id } = useParams<{ id: string }>();
+  const queryClient = useQueryClient();
 
-  // Simulate fetching task data
-  useEffect(() => {
-    // Replace with API fetch logic
-    const fetchedTask = { title: "Brush you teeth", color: "#f87171" };
-    setTask(fetchedTask);
-  }, [id]);
+  const {
+    data: { data: task } = {},
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: () => fetchTaskById(id),
+    queryKey: ["task", "tasks"],
+  });
+
+  const mutation = useMutation({
+    mutationFn: (formData: { title: string; color: string }) => {
+      return editTask(id, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  if (isLoading) return <>Loading...</>;
+  if (isError) return <div>Sorry There was an Error</div>;
 
   const handleSaveTask = (title: string, color: string) => {
-    console.log(`Task ${id} updated:`, { title, color });
-    router.push("/");
+    mutation.mutate({ title, color });
+    redirect("/");
   };
-
-  if (!task) return <div className="text-center text-white">Loading...</div>;
 
   return (
     <div className="max-w-3xl min-h-screen bg-background text-white p-6 m-auto">
       <BackButton />
-      <TaskForm onSubmit={handleSaveTask} initialData={task} />
+      <TaskForm onSubmit={handleSaveTask} taskData={task} />
     </div>
   );
 }

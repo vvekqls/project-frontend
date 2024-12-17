@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,39 +8,38 @@ import { PlusCircle, Check } from "lucide-react";
 
 interface TaskFormProps {
   onSubmit: (title: string, color: string) => void;
-  initialData?: { title: string; color: string };
+  taskData?: { title: string; color: string };
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, initialData }) => {
-  const [title, setTitle] = useState(initialData?.title || "");
+const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, taskData }) => {
+  const [title, setTitle] = useState(taskData?.title || "");
   const [selectedColor, setSelectedColor] = useState(
-    initialData?.color || "#f87171"
+    taskData?.color || "#ff0000"
   );
 
-  const router = useRouter();
-
   const colors = [
-    "#f87171", // Red
-    "#fbbf24", // Orange
-    "#facc15", // Yellow
-    "#34d399", // Green
-    "#60a5fa", // Blue
-    "#a78bfa", // Purple
-    "#f472b6", // Pink
-    "#a78d70", // Brown
+    "#ff0000", // Red
+    "#ff8000", // Orange
+    "#ffff00", // Yellow
+    "#00ff00", // Green
+    "#0000ff", // Blue
+    "#8000ff", // DarkBlue
+    "#bf00ff", // Purple
+    "#ff0080", // Pink
+    "#cc9900", // brown
   ];
 
   useEffect(() => {
-    if (initialData) {
-      setTitle(initialData.title);
-      setSelectedColor(initialData.color);
+    if (taskData) {
+      setTitle(taskData.title);
+      setSelectedColor(taskData.color);
     }
-  }, [initialData]);
+  }, [taskData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title) onSubmit(title, selectedColor);
-    router.push("/");
+    redirect("/");
   };
 
   return (
@@ -72,7 +71,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, initialData }) => {
         type="submit"
         className="w-full h-14 mb-6 bg-blue text-sm py-2 rounded font-bold"
       >
-        {initialData ? (
+        {taskData ? (
           <>
             Save
             <Check size={24} strokeWidth={5} />

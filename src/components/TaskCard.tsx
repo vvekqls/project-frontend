@@ -12,24 +12,43 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateCompletion, deleteTask } from "@/utils";
 import clsx from "clsx";
 
 interface TaskCardProps {
-  id: number;
+  id: string;
   title: string;
   color: string;
   completed: boolean;
-  onToggle: () => void;
   onDelete: () => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({
-  id,
-  title,
-  completed,
-  onToggle,
-  onDelete,
-}) => {
+const TaskCard: React.FC<TaskCardProps> = ({ id, title, completed }) => {
+  const queryClient = useQueryClient();
+
+  const completedToggleMutation = useMutation({
+    mutationFn: (updatedData: boolean) => updateCompletion(id, updatedData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  const handleToggleCompletion = (updateCompletion: boolean) => {
+    completedToggleMutation.mutate(!updateCompletion);
+  };
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteTask(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  const handleDeleteTask = (id: string) => {
+    deleteMutation.mutate(id);
+  };
+
   return (
     <Card className="flex items-center justify-between bg-foreground text-white mb-4 rounded-lg	border-foreground border-2">
       <Checkbox
@@ -39,7 +58,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
           completed && "bg-purple"
         )}
         checked={completed}
-        onCheckedChange={onToggle}
+        onCheckedChange={handleToggleCompletion}
       />
       <Link key={id} className="w-11/12 overflow-hidden" href={`/edit/${id}`}>
         <CardContent className="flex items-center gap-4 p-4">
@@ -69,7 +88,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
             <Button
               type="submit"
               className="text-whit-500 bg-red-500"
-              onClick={onDelete}
+              onClick={() => handleDeleteTask(id)}
             >
               Delete
             </Button>
