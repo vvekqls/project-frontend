@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+- First, run the development server: https://github.com/vvekqls/project-backend
 
 ```bash
 npm run dev
@@ -12,6 +12,38 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
+## Setup
+
+- To run locally, install dependencies. Install nvm if no version found.
+  ```sh
+    nvm -v
+  ```
+  ```sh
+    nvm install 20.9.0
+    ```
+  ```sh
+    nvm use 20.9.0
+  ```
+  ```sh
+    npm install
+  ```
+  ```sh
+    npm run dev
+  ```
+
+### Run Docker
+
+- make sure Docker is running first & run docker on root folder
+- this will run server
+  - ```sh
+    docker compose up 
+    ```
+
+### Starting Client
+
+```sh
+# go to http://localhost:3000
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
